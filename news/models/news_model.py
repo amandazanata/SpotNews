@@ -1,38 +1,22 @@
-from django.core.exceptions import ValidationError
-from django.core.validators import MinLengthValidator
 from django.db import models
-
-from news.models.category_model import Categories
-from news.models.user_model import Users
+from .validators import validate_title
 
 
+# Req 3
 class News(models.Model):
-    def not_single_word(value):
-
-        if len(value.split()) <= 1:
-            raise ValidationError(
-                "O título deve conter pelo menos 2 palavras.",
-            )
-
     title = models.CharField(
-        validators=[
-            not_single_word,
-        ],
-        max_length=200,
-    )
-    content = models.TextField(
-        validators=[
-            MinLengthValidator(1, "Este campo não pode estar vazio."),
-        ],
-    )
-    author = models.ForeignKey(Users, on_delete=models.CASCADE)
-    image = models.ImageField(
-        upload_to="img/",
-        blank=True,
+        max_length=200, blank=False, null=False, validators=[validate_title]
     )
 
-    categories = models.ManyToManyField(Categories, related_name="news")
-    created_at = models.DateField()
+    content = models.TextField()
+
+    author = models.ForeignKey("Users", on_delete=models.CASCADE)
+
+    created_at = models.DateField(blank=False, null=False)
+
+    image = models.ImageField(upload_to="img/", blank=True, null=True)
+
+    categories = models.ManyToManyField("Categories", blank=True, null=True)
 
     def __str__(self):
         return self.title

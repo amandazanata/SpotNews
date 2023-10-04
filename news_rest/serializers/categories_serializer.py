@@ -1,9 +1,8 @@
 from rest_framework import serializers
-
 from news.models import Categories
 
 
-class CategoriesSerializer(serializers.ModelSerializer):
+class CategoriesSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Categories
-        fields = "__all__"
+        fields = ["id", "name"]
