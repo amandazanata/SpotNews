@@ -26,6 +26,8 @@ from news_rest.serializers.categories_view import (  # type: ignore
 
 router = routers.DefaultRouter()
 router.register(r"categories", _)
+router.register(r"news", _)
+router.register(r"users", _)
 
 urlpatterns = [
     path("admin/", admin.site.urls),
