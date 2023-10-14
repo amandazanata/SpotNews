@@ -1,43 +1,52 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import News, Categories, Users
+from .forms import CategoryForm, NewsForm
 
-from news.form.categories import Categories_forms  # type: ignore
-from news.form.news import News_form  # type: ignore
-from news.models import News  # type: ignore
-
-
-def home_view(request):
-    news = News.objects.all()  # type: ignore
-    return render(request, "home.html", {"news": news})
+# Create your views here.
 
 
-def details_view(request, id):
-    news = News.objects.get(id=id)  # type: ignore
-    return render(request, "news_details.html", {"details": news})
+def home(request):
+    news_list = News.objects.all()
+    context = {
+        "news_list": news_list,
+    }
+    return render(request, "home.html", context)
 
 
-def categories_view(request):
-    form = (
-        Categories_forms(request.POST)
-        if request.method == "POST"
-        else Categories_forms()
-    )
+def news_details(request, id):
+    news = get_object_or_404(News, id=id)
+    return render(request, "news_details.html", {"news": news})
 
-    if request.method == "POST" and form.is_valid():
-        form.save()
-        return redirect("home-page")
 
+def categories_form(request):
+    if request.method == "POST":
+        form = CategoryForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("home-page")
+    else:
+        form = CategoryForm()
     return render(request, "categories_form.html", {"form": form})
 
 
-def news_view(request):
-    form = (
-        News_form(request.POST, request.FILES)
-        if request.method == "POST"
-        else News_form()
-    )
+def news_form(request):
+    if request.method == "POST":
+        form = NewsForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect(
+                "home-page"
+            )
+    else:
+        form = NewsForm()
 
-    if request.method == "POST" and form.is_valid():
-        form.save()
-        return redirect("home-page")
+    users = Users.objects.all()
+    categories = Categories.objects.all()
 
-    return render(request, "news_form.html", {"form": form})
+    context = {
+        "form": form,
+        "users": users,
+        "categories": categories,
+    }
+
+    return render(request, "news_form.html", context)

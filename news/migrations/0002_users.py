@@ -2,13 +2,13 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-    initial = True
-
-    dependencies = []
+    dependencies = [
+        ("news", "0001_initial"),
+    ]
 
     operations = [
         migrations.CreateModel(
-            name="Categories",
+            name="Users",
             fields=[
                 (
                     "id",
@@ -20,6 +20,9 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 ("name", models.CharField(max_length=200)),
+                ("email", models.EmailField(max_length=200)),
+                ("password", models.CharField(max_length=200)),
+                ("role", models.CharField(max_length=200)),
             ],
         ),
     ]

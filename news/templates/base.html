@@ -1,28 +1,22 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>
-            {% block title %}title{% endblock %}
-        </title>
-        <link href={% static 'css/style.css' %} rel="stylesheet">
-    </head>
-    <body>
-        <header class="header">
-            <ul class="header-links">
-                <li>
-                    <a href={% url "home-page" %}>Home</a>
-                </li>
-                <li>
-                    <a href={% url "categories-form" %}>Cadastrar Categorias</a>
-                </li>
-                <li>
-                    <a href={% url 'news-form' %}>Cadastrar Noticias</a>
-                </li>
-            </ul>
-            <main>
-                {% block main %}{% endblock %}
-            </main>
-        </header>
-    </body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <title>{% block title %}Página Inicial{% endblock %}</title>
+  </head>
+  <body>
+    <header class="header">
+      <ul class="header-links">
+        <li><a href="{% url 'home-page' %}">Home</a></li>
+        <li><a href="{% url 'categories-form' %}">Cadastrar Categorias</a></li>
+        <li><a href="{% url 'news-form' %}">Cadastrar Notícias</a></li>
+      </ul>
+    </header>
+
+    <main>{% block content %}{% endblock %}</main>
+  </body>
 </html>
