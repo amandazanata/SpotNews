@@ -1,17 +1,17 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load static %}
-
-{% block title %}
-<title>Página Inicial</title>
+{% block title %}Página Inicial{% endblock %}
+{% block main %}
+    <div>
+        {% for new in news %}
+            <a href={% url 'news-details-page' new.id %}>
+                <section>
+                    <img src="{% static new.image.url %}" alt="">
+                    <h2 class="news-title">{{ new.title }}</h2>
+                    <span class="news-date">{{ new.created_at|date:"d/m/Y" }}</span>
+                </section>
+            </a>
+        {% endfor %}
+    </div>
 {% endblock %}
-
-{% block content %}
-<h1>Página Inicial</h1>
-{% for news in news_list %}
-<div>
-    <h2 class="news-title">{{ news.title }}</h2>
-    <img src="{% static news.image %}" alt="{{ news.title }}">
-    <span class="news-date">{{ news.created_at|date:"d/m/Y" }}</span>
-</div>
-{% endfor %}
-{% endblock %}
+```

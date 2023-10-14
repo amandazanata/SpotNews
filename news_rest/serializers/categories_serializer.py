@@ -1,8 +1,9 @@
 from rest_framework import serializers
-from news.models import Categories
+
+from news.models import Categories  # type: ignore
 
 
-class CategoriesSerializer(serializers.HyperlinkedModelSerializer):
+class CategoriesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Categories
-        fields = ["id", "name"]
+        fields = "__all__"

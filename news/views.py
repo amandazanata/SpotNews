@@ -1,27 +1,43 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from .models import News
-from news.forms import CategoriesForm
+from django.shortcuts import redirect, render
 
-# Create your views here.
-
-
-def home(request):
-    new = {"news_list": News.objects.all()}
-    return render(request, "home.html", new)
+from news.form.categories import Categories_forms  # type: ignore
+from news.form.news import News_form  # type: ignore
+from news.models import News  # type: ignore
 
 
-def details_page(request, id):
-    new = {"news": get_object_or_404(News, id=id)}
-    return render(request, "news_details.html", new)
+def home_view(request):
+    news = News.objects.all()  # type: ignore
+    return render(request, "home.html", {"news": news})
 
 
-# Req 6
-def forms_categories(request):
-    form = CategoriesForm()
-    if request.method == "POST":
-        form = CategoriesForm(request.POST)
-        if form.is_valid():
-            # form.save()
-            return redirect("home-page")
+def details_view(request, id):
+    news = News.objects.get(id=id)  # type: ignore
+    return render(request, "news_details.html", {"details": news})
+
+
+def categories_view(request):
+    form = (
+        Categories_forms(request.POST)
+        if request.method == "POST"
+        else Categories_forms()
+    )
+
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        return redirect("home-page")
 
     return render(request, "categories_form.html", {"form": form})
+
+
+def news_view(request):
+    form = (
+        News_form(request.POST, request.FILES)
+        if request.method == "POST"
+        else News_form()
+    )
+
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        return redirect("home-page")
+
+    return render(request, "news_form.html", {"form": form})

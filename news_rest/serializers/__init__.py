@@ -1,0 +1,2 @@
+from news_rest.serializers.categories_serializer import CategoriesSerializer
+from news_rest.serializers.categories_view import CategoriesViewSet
